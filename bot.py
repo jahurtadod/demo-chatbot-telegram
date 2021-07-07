@@ -1,4 +1,5 @@
 import logging
+from os import name
 from telegram.ext import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import responses
@@ -57,7 +58,8 @@ def pizza_callback_handler(update, context):
     query.answer()
 
     query.edit_message_text(
-        text='Seleccione la pizza que desea'
+        text=('Listo '+ update.callback_query.message.chat.first_name +
+              ', comencemos por seleccionar la pizza que deseas:')
     )
 
 
@@ -92,7 +94,8 @@ if __name__ == '__main__':
     dp.add_handler(ConversationHandler(
         entry_points=[
             CommandHandler('pizza', pizza_command),
-            CallbackQueryHandler(pattern='pizza', callback=pizza_callback_handler)
+            CallbackQueryHandler(
+                pattern='pizza', callback=pizza_callback_handler)
         ],
 
         states={
