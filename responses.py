@@ -20,7 +20,7 @@ def get_response(message):
     response_list = [
         process_message(message, ['hola', 'buenos dias', 'hey'], 'Hola 😃'),
         process_message(message, ['adios', 'salir'], 'Adiós!'),
-        process_message(message, ['como te llamas', 'nombre'], 'Mi nombre is Geo, encantada de conocerte!'),
+        process_message(message, ['llamas', 'nombre'], 'Mi nombre is Geo, encantada de conocerte!'),
         process_message(message, ['help', 'ayuda'], 'Haré todo lo posible para ayudarte')
     ]
 
