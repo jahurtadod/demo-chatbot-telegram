@@ -1,8 +1,10 @@
 import re
 
+
 def process_message(message, response_array, response):
     # Splits the message and the punctuation into an array
     list_message = re.findall(r"[\w']+|[.,!?;]", message.lower())
+    # print(list_message)
 
     # Scores the amount of words in the message
     score = 0
@@ -16,12 +18,22 @@ def process_message(message, response_array, response):
 
 
 def get_response(message):
-    # Add your custom responses here
+    # Custom responses
     response_list = [
-        process_message(message, ['hola', 'buenos dias', 'hey'], 'Hola 😃'),
-        process_message(message, ['adios', 'salir'], 'Adiós!'),
-        process_message(message, ['llamas', 'nombre'], 'Mi nombre is Geo, encantada de conocerte!'),
-        process_message(message, ['help', 'ayuda'], 'Haré todo lo posible para ayudarte')
+        process_message(
+            message, ['hola', 'buenos dias', 'hey', 'holi'], 'Hola 😃, quieres comprar una pizza ?'),
+        process_message(message, ['adios', 'salir', 'cuidate', 'gracias'],
+                        'Adiós!, espero que vuelvas pronto\nQuieres validar tu experiencia de compra'),
+        process_message(message, ['llamas', 'nombre'],
+                        'Mi nombre is Geo, encantada de conocerte!'),
+        process_message(message, ['help', 'ayuda', 'informacion', 'información'],
+                        'Haré todo lo posible para ayudarte\n\nSi tienes dudas podemos puedes usar el comando /start'),
+        process_message(message, ['pedir', 'ordenar', 'comprar', 'si'],
+                        'Indicame que pizza deseas'),
+        process_message(message, ['especial', 'george', 'mariscos'],
+                        'Listo, te informare cuando este la pizza, esperame\n\n /pagar Proceder a pagar'),
+        process_message(message, ['cancelar', 'ya no quiero'],
+                        'Nooo, que pena cancelare tu pedido')
     ]
 
     # Checks all of the response scores and returns the best matching response
