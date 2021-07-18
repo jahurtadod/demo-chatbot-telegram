@@ -1,11 +1,11 @@
-import logging
 from os import name
 from telegram.ext import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-import responses
+import logging
 import connection_dbpedia as search
 import demo_spacy as analysis
 import Constants as keys
+import menu
 
 INPUT_TEXT = 0
 
@@ -14,32 +14,60 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logging.info('Starting Bot...')
 
+# Message error
+
+
+def error(update, context):
+    logging.error(f'Update {update} caused error {context.error}')
+
+# MENUS
+
 
 def menu_command(update, context):
+    update.message.reply_text("Bienvenido, soy geo ¿vamos por una pizza?",
+                              reply_markup=menu.main_menu_keyboard())
 
-    button1 = InlineKeyboardButton(
-        text='Descarga la app de George\'s Pizza',
-        url='https://github.com/jahurtadod/sematic-app-demo'
-    )
 
-    button2 = InlineKeyboardButton(
-        text='Solicitar Pizza',
-        callback_data='pizza'
-    )
+def main_menu(update, context):
+    query = update.callback_query
+    query.edit_message_text(text="Bienvenido, soy geo ¿vamos por una pizza?",
+                            reply_markup=menu.main_menu_keyboard())
 
-    button3 = InlineKeyboardButton(
-        text='Crear Pizzas',
-        url='https://github.com/jahurtadod/sematic-app-demo'
-    )
 
-    update.message.reply_text(
-        text='Bienvenido, soy geo ¿vamos por una pizza?',
-        reply_markup=InlineKeyboardMarkup([
-            [button3],
-            [button2],
-            [button1]
-        ])
-    )
+def first_menu(update, context):
+    query = update.callback_query
+    query.edit_message_text(
+        text="¿De qué tamaño quieres la pizza?",
+        reply_markup=menu.first_menu_keyboard())
+
+
+def first_submenu(update, context):
+    query = update.callback_query
+    query.edit_message_text(
+        text="¿Está seguro que desea ordenar esta pizza?",
+        reply_markup=menu.first_submenu_keyboard())
+
+
+def second_menu(update, context):
+    query = update.callback_query
+    query.edit_message_text(
+        text="Para crear una pizza primero indícame cuantas cubiertas tendrá tu pizza",
+        reply_markup=menu.second_menu_keyboard())
+
+
+def second_submenu(update, context):
+    query = update.callback_query
+    query.edit_message_text(
+        text="Aún estamos trabajando en esta función, cuando este recién orneada te cuento ¿vale?",
+        reply_markup=menu.second_submenu_keyboard())
+
+
+def second_submenu_1(update, context):
+    query = update.callback_query
+    query.edit_message_text(
+        text="Listo te avisare cuando esté listo")
+
+# COMMANDS
 
 
 def help_command(update, context):
@@ -48,6 +76,13 @@ def help_command(update, context):
         "\n\nYo soy Geo, tu asistente te apoyare en todo tu recorrido"
         "\n/start Si tienes alguna duda de como puedes interactuar conmigo"
         "t\n\nEncontramos a Geo en busca de probar todas las pizzas del mundo, de como termino aqui no lo sabemos pero, creo que le gusta estar aquí")
+
+
+def ingredients_command(update, context):
+    user_says = " ".join(context.args)
+    # update.message.reply_text("You said: " + user_says)
+    update.message.reply_text(
+        "Los ingredientes de  " + user_says + " son:\n\n"+search.get_response_dbpedia_ingredients(user_says.capitalize()))
 
 
 def custom_command(update, context):
@@ -64,7 +99,6 @@ def pizza_command(update, context):
         "\nDeep-fried_pizza"
         "\nDeep-fried_pizza"
         "\nItalian_tomato_pie"
-        "\nNew_York-style_pizza"
         "\nSicilian_pizza"
         "\nChicago-style_pizza"
     )
@@ -79,7 +113,8 @@ def start_command(update, context):
         "\n/help para buscar mas información de mí"
         "\n/custom comando de prueba"
         "\n/types mostrar el listado de pizzas"
-        "\n/pizza muestra las pizzas que puedes buscar")
+        "\n/pizza muestra las pizzas que puedes buscar"
+        "\n/ingredients 'nombre de la pizza' permite buscar los ingredientes de la pizza")
 
 
 def types_command(update, context):
@@ -91,14 +126,25 @@ def types_command(update, context):
                                   "\n\nDescripción : " + comment + "\n" + image_url)
 
 
-def pizza_callback_handler(update, context):
-    query = update.callback_query
-    query.answer()
+# def pizza_callback_handler(update, context):
+#     query = update.callback_query
+#     query.answer()
 
-    query.edit_message_text(
-        text=('Listo ' + update.callback_query.message.chat.first_name +
-              ', comencemos por seleccionar la pizza que deseas:')
-    )
+#     # query.edit_message_text(
+#     #    text=('Listo ' + update.callback_query.message.chat.first_name +
+#     #          ', comencemos por seleccionar la pizza que deseas:')
+#     # )
+#     button1 = InlineKeyboardButton(
+#         text='Descarga la app de George\'s Pizza',
+#         url='https://github.com/jahurtadod/sematic-app-demo'
+#     )
+
+#     update.message.reply_text(
+#         text='Bienvenido, soy geo ¿vamos por una pizza?',
+#         reply_markup=InlineKeyboardMarkup([
+#             [button1]
+#         ])
+#     )
 
 
 def handle_message(update, context):
@@ -124,10 +170,6 @@ def handle_message(update, context):
             "Información sobre "+list+" :\n\n"+search.get_response_dbpedia(list.capitalize()))
 
 
-def error(update, context):
-    logging.error(f'Update {update} caused error {context.error}')
-
-
 if __name__ == '__main__':
     updater = Updater(token=keys.API_KEY, use_context=True)
 
@@ -140,23 +182,21 @@ if __name__ == '__main__':
     dp.add_handler(CommandHandler('custom', custom_command))
     dp.add_handler(CommandHandler('types', types_command))
     dp.add_handler(CommandHandler('pizza', pizza_command))
+    dp.add_handler(CommandHandler(
+        'ingredients', ingredients_command, pass_args=True))
+
+    dp.add_handler(CallbackQueryHandler(main_menu, pattern='main'))
+    dp.add_handler(CallbackQueryHandler(first_menu, pattern='m1'))
+    dp.add_handler(CallbackQueryHandler(second_menu, pattern='m2'))
+
+    dp.add_handler(CallbackQueryHandler(
+        first_submenu, pattern='m3', pass_chat_data=True))
+
+    dp.add_handler(CallbackQueryHandler(second_submenu, pattern='m4'))
+    dp.add_handler(CallbackQueryHandler(second_submenu_1, pattern='m5'))
 
     # Messages
     dp.add_handler(MessageHandler(Filters.text, handle_message))
-
-    dp.add_handler(ConversationHandler(
-        entry_points=[
-            CommandHandler('pizza', pizza_command),
-            CallbackQueryHandler(
-                pattern='pizza', callback=pizza_callback_handler)
-        ],
-
-        states={
-            INPUT_TEXT: [MessageHandler(Filters.text, handle_message)]
-        },
-
-        fallbacks=[]
-    ))
 
     # Log all errors
     dp.add_error_handler(error)

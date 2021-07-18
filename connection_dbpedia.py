@@ -1,5 +1,3 @@
-import requests
-from rdflib import Graph
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 sparql = SPARQLWrapper('https://dbpedia.org/sparql')
@@ -29,6 +27,27 @@ def get_response_dbpedia(item):
         return comment
 
 
+def get_response_dbpedia_ingredients(item):
+    sparql.setQuery(f'''
+        SELECT ?ingredientName
+        WHERE {{ 
+            dbr:{item} dbo:ingredientName ?ingredientName .
+        }}
+    ''')
+    sparql.setReturnFormat(JSON)
+    qres = sparql.query().convert()
+
+    if len(qres['results']['bindings']) == 0:
+        # print("---------------------")
+        return "Información no encontrada"
+
+    else:
+        result = qres['results']['bindings'][0]
+        ingredient = result['ingredientName']['value']
+        # print("---------------------me lleva")
+        return ingredient
+
+
 def get_response_dbpedia_pizzas():
     sparql.setQuery(f'''
         SELECT ?name ?comment ?image
@@ -48,6 +67,7 @@ def get_response_dbpedia_pizzas():
 
     return qres
 
+
 def get_response_dbpedia_pizzasname():
     sparql.setQuery(f'''
         SELECT ?name ?comment ?image
@@ -66,6 +86,7 @@ def get_response_dbpedia_pizzasname():
     qres = sparql.query().convert()
 
     return qres
+
 
 if __name__ == '__main__':
 
