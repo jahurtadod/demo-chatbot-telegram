@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-import connection_georgepizza as georgepizza
+import connection_georgepizza as geo
 
 
 def main_menu_keyboard():
@@ -14,12 +14,11 @@ def main_menu_keyboard():
 def first_menu_keyboard():
     keyboard = [[InlineKeyboardButton('Menu Principal', callback_data='main')]]
 
-    qres = georgepizza.get_pizzas()
+    qres = geo.get_response_pizzas()
 
     for i in range(len(qres['results']['bindings'])):
         result = qres['results']['bindings'][i]
         name = result['name']['value']
-        print(name)
         keyboard.insert(0, [InlineKeyboardButton(
             name, callback_data='m3')])
 

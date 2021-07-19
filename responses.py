@@ -20,20 +20,21 @@ def process_message(message, response_array, response):
 def get_response(message):
     # Custom responses
     response_list = [
-        process_message(
-            message, ['hola', 'buenos dias', 'hey', 'holi'], 'Hola 😃, quieres comprar una pizza ?'),
-        process_message(message, ['adios', 'salir', 'cuidate', 'gracias'],
-                        'Adiós!, espero que vuelvas pronto\nQuieres validar tu experiencia de compra'),
-        process_message(message, ['llamas', 'nombre'],
-                        'Mi nombre is Geo, encantada de conocerte!'),
-        process_message(message, ['help', 'ayuda', 'informacion', 'información'],
-                        'Haré todo lo posible para ayudarte\n\nSi tienes dudas podemos puedes usar el comando /start'),
-        process_message(message, ['pedir', 'ordenar', 'comprar', 'si'],
-                        'Indicame que pizza deseas'),
-        process_message(message, ['especial', 'george', 'mariscos'],
-                        'Listo, te informare cuando este la pizza, esperame\n\n /pagar Proceder a pagar'),
-        process_message(message, ['cancelar', 'ya no quiero'],
-                        'Nooo, que pena cancelare tu pedido')
+        # process_message(
+        #     message, ['hola', 'buenos dias', 'hey', 'holi'], 'Hola 😃, quieres comprar una pizza ?'),
+        # process_message(message, ['adios', 'salir', 'cuidate', 'gracias'],
+        #                 'Adiós!, espero que vuelvas pronto\nQuieres validar tu experiencia de compra'),
+        # process_message(message, ['llamas', 'nombre'],
+        #                 'Mi nombre is Geo, encantada de conocerte!'),
+        # process_message(message, ['help', 'ayuda', 'informacion', 'información'],
+        #                 'Haré todo lo posible para ayudarte\n\nSi tienes dudas podemos puedes usar el comando /start'),
+        # process_message(message, ['pedir', 'ordenar', 'comprar', 'si'],
+        #                 'Indicame que pizza deseas'),
+        # process_message(message, ['especial', 'george', 'mariscos'],
+        #                 'Listo, te informare cuando este la pizza, esperame\n\n /pagar Proceder a pagar'),
+        # process_message(message, ['cancelar', 'ya no quiero'],
+        #                 'Nooo, que pena cancelare tu pedido'),
+        process_message(message, ['querer', 'dar', "ordenar", "damar", "pedir", "comer", "servir", "desear", "apetecer"], "si")
     ]
 
     # Checks all of the response scores and returns the best matching response
@@ -47,9 +48,9 @@ def get_response(message):
 
     # Return the matching response to the user
     if winning_response == 0:
-        bot_response = 'No entendí lo que escribiste 😭'
+        bot_response = False
     else:
-        bot_response = matching_response[1]
+        bot_response = True
 
     print('Bot response:', bot_response)
     return bot_response

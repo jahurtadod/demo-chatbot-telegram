@@ -67,3 +67,4 @@ for instrument in instruments:
     response = requests.get(image_url)
     # display(Image.open(BytesIO(response.content)))
     print(f'{comment}...')
+    

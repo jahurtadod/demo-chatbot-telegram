@@ -4,7 +4,7 @@ sparql = SPARQLWrapper(
     'http://localhost:3030/georgepizza/sparql')
 
 
-def get_pizzas():
+def get_response_pizzas():
     sparql.setQuery('''
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -24,4 +24,4 @@ def get_pizzas():
 
 
 if __name__ == '__main__':
-    get_pizzas()
+    get_response_pizzas()

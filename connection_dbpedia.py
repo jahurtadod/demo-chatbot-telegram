@@ -7,8 +7,8 @@ def get_response_dbpedia(item):
     sparql.setQuery(f'''
         SELECT ?name ?comment
         WHERE {{
-            dbr:{item} rdfs:label ?name.
-            dbr:{item} rdfs:comment ?comment.
+            dbr:{item} rdfs:label ?name .
+            dbr:{item} rdfs:comment ?comment .
             FILTER (lang(?name) = 'es')
             FILTER (lang(?comment) = 'es')
         }}
@@ -26,6 +26,23 @@ def get_response_dbpedia(item):
         # print("---------------------me lleva")
         return comment
 
+def get_response_dbpedia_food(item):
+    sparql.setQuery(f'''
+        SELECT distinct ?label
+        WHERE {{
+            ?s rdfs:label ?label .
+            ?s rdf:type dbo:Food .
+            ?s dbo:ingredient ?ingredient .
+            ?ingredient rdfs:label ?ingredientLabel .
+            FILTER regex(?ingredientLabel , "{item}", "i") 
+            FILTER regex(?label, "pizza", "i") 
+            FILTER (lang(?label) = "es") 
+            FILTER (lang(?ingredientLabel) = "es") 
+        }}
+    ''')
+    sparql.setReturnFormat(JSON)
+    qres = sparql.query().convert()
+    return qres
 
 def get_response_dbpedia_ingredients(item):
     sparql.setQuery(f'''
