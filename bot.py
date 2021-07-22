@@ -108,7 +108,7 @@ def start_command(update, context):
         "\n/listPizzaDb -> muestra el listado de pizzas de DBpedia"
         "\n/listPizzaGeo -> muestra el listado de pizzas de George\'s Pizza"
         "\n/pizza -> muestra las pizzas que puedes buscar"
-        "\n/ingredients \"nombre de la pizza\" -> permite buscar los ingredientes de la pizza (utiliza el commando /pizza para ver que pizzas puedes buscar)")
+        "\n/ingredients \"nombre de la pizza\" -> permite buscar los ingredientes de la pizza (utiliza el comando /pizza para ver que pizzas puedes buscar)")
 
 
 def types_command_dbpedia(update, context):
@@ -139,8 +139,8 @@ def handle_message(update, context):
     # update.message.reply_text("te amo")
     doc = analysis.spacy_info(text)
     for w in doc:
-        update.message.reply_text(
-            w.text + " es un " + w.pos_ + " lemma: " + w.lemma_)
+        update.message.reply_text("Palabra : \"" +
+                                  w.text + "\" -> es un " + w.pos_ + "\nLemma: " + w.lemma_)
         if w.pos_ == "NOUN":
             print("NOUN " + w.text)
             listNoun.append(w.text)

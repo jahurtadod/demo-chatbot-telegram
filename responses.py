@@ -34,7 +34,7 @@ def get_response(message):
         #                 'Listo, te informare cuando este la pizza, esperame\n\n /pagar Proceder a pagar'),
         # process_message(message, ['cancelar', 'ya no quiero'],
         #                 'Nooo, que pena cancelare tu pedido'),
-        process_message(message, ['querer', 'dar', "ordenar", "damar", "pedir", "comer", "servir", "desear", "apetecer"], "si")
+        process_message(message, ['querer', 'dar', "ordenar", "damar", "pedir", "comer", "servir", "desear", "apetecer", "comprar"], "pedir")
     ]
 
     # Checks all of the response scores and returns the best matching response
