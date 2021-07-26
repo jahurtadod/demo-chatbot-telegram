@@ -41,7 +41,7 @@ updater = Updater(token=keys.API_KEY, use_context=True)
     ''')
 ``` 
 
-> Para la ontologia del proyecto recopilamos la informacion de forma local con el uso de Apache Fuseki
+> Para la ontología del proyecto recopilamos la información de forma local con el uso de Apache Fuseki.
 ```python
     sparql.setQuery('''
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
